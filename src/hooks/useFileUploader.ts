@@ -217,23 +217,40 @@ const useFileUploader = () => {
     element: HTMLTextAreaElement,
     value: string
   ): void => {
-    const valueSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLTextAreaElement.prototype,
-      "value"
-    )?.set;
-    const prototype = Object.getPrototypeOf(element);
-    const prototypeValueSetter = Object.getOwnPropertyDescriptor(
-      prototype,
-      "value"
-    )?.set;
+    console.log(value)
+    try {
 
-    if (valueSetter && valueSetter !== prototypeValueSetter) {
-      prototypeValueSetter?.call(element, value);
-    } else {
-      valueSetter?.call(element, value);
+      // const valueSetter = Object.getOwnPropertyDescriptor(
+      //   window.HTMLTextAreaElement.prototype,
+      //   "value"
+      // )?.set;
+      console.log(element)
+      // const prototype = Object.getPrototypeOf(element);
+      // const prototypeValueSetter = Object.getOwnPropertyDescriptor(
+      //   prototype,
+      //   "value"
+      // )?.set;
+
+      // if (valueSetter && valueSetter !== prototypeValueSetter) {
+      //   prototypeValueSetter?.call(element, value);
+      // } else {
+      //   valueSetter?.call(element, value);
+      // }
+
+      // element.dispatchEvent(new Event("input", { bubbles: true }));
+
+      const newParagraph = document.createElement('p');
+
+      // Set the content of the <p> element
+      newParagraph.textContent = value;
+
+      // Append the <p> element as a child to the parent
+      element.appendChild(newParagraph);
+
+    } catch (error) {
+      console.log(error)
     }
 
-    element.dispatchEvent(new Event("input", { bubbles: true }));
   };
 
   const simulateEnterKey = async (value: string): Promise<void> => {
@@ -272,8 +289,8 @@ const useFileUploader = () => {
       totalParts === 1
         ? singleFilePrompt
         : done
-        ? lastPartPrompt
-        : splittedPrompt;
+          ? lastPartPrompt
+          : splittedPrompt;
     const promptFilename = `Filename: ${fileName || "Unknown"}`;
     const promptPart = `Part ${part} of ${totalParts}:`;
     const prompt = `

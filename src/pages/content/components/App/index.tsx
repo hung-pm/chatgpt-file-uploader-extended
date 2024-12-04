@@ -13,6 +13,7 @@ root.classList.add("items-center");
 const placeFileUploaderSectionToDOM = () => {
   const promptTextarea = document.querySelector("#prompt-textarea");
   const parent = promptTextarea?.parentElement?.parentElement;
+  console.log(promptTextarea);
 
   if (parent) {
     parent.append(root);

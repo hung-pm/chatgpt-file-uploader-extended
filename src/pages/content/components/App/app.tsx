@@ -114,9 +114,8 @@ export default function App() {
             />
 
             <button
-              className={`text-white rounded-md w-fit hover:opacity-80 transition-all ${
-                isSubmitting ? "cursor-not-allowed bg-gray-900" : "bg-green-500"
-              }`}
+              className={`text-white rounded-md w-fit hover:opacity-80 transition-all ${isSubmitting ? "cursor-not-allowed bg-gray-900" : "bg-green-500"
+                }`}
               onClick={onUploadButtonClick}
               disabled={isSubmitting}
               style={{ height: "36px", padding: "0 8px" }}

@@ -1,5 +1,5 @@
 {
-  "name": "chatgpt-file-uploader",
+  "name": "chatgpt-file-uploader-custom",
   "version": "1.5.1",
   "description": "ChatGPT File Uploader Extended - Upload various file types to ChatGPT",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "build:watch": "__DEV__=true vite build --watch",
     "build:hmr": "rollup --config utils/reload/rollup.config.ts",
     "wss": "node utils/reload/initReloadServer.js",
-    "dev": "pnpm run wss & pnpm run build:hmr & pnpm run build:watch",
+    "dev": "npm run wss & npm run build:hmr & npm run build:watch",
     "typecheck": "tsc --noEmit"
   },
   "type": "module",
