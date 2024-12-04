@@ -301,14 +301,13 @@ const useFileUploader = () => {
         await submitConversation(chunk, part, i === numChunks - 1, numChunks);
         await wait();
         setCurrentPart(part);
-        let chatgptReady = false;
         let currentTry = 0; // Initialize the counter
 
-        while (!chatgptReady && !isStopRequestedRef.current) {
+        let stopStreamingButton = document.querySelector('button[aria-label="Stop streaming"]');
+
+        while (stopStreamingButton && !isStopRequestedRef.current) {
           await wait();
-          chatgptReady = !document.querySelector(
-            ".text-2xl > span:not(.invisible)"
-          );
+          stopStreamingButton = document.querySelector('button[aria-label="Stop streaming"]');
           currentTry += 1; // Increment the counter
 
           if (isStopRequestedRef.current) {
@@ -319,12 +318,12 @@ const useFileUploader = () => {
           }
         }
 
-        if (currentTry >= maxTries) {
-          console.error("Max tries exceeded. Exiting...");
-          setError("Max tries exceeded. Exiting...");
-          clearState();
-          return; // Exit the function or handle this case appropriately
-        }
+        // if (currentTry >= maxTries) {
+        //   console.error("Max tries exceeded. Exiting...");
+        //   setError("Max tries exceeded. Exiting...");
+        //   clearState();
+        //   return; // Exit the function or handle this case appropriately
+        // }
 
         if (!isStopRequestedRef.current) {
           processChunk(i + 1); // Process the next chunk
@@ -339,8 +338,6 @@ const useFileUploader = () => {
             console.log(content);
           }
         });
-
-
 
         clearState();
       }
