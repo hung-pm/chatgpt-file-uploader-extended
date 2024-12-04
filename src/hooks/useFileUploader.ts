@@ -138,6 +138,7 @@ const useFileUploader = () => {
 
   async function handleSubmission(file: File) {
     await getSettingsFromLocalStorage();
+    await saveToLocalStorage("basePrompt", "");
     setIsSubmitting(true);
 
     setIsStopRequested(false);
@@ -173,6 +174,7 @@ const useFileUploader = () => {
       } else {
         fileContent = await readFileAsText(file);
       }
+
     } catch (error) {
       console.error(error);
       const errorMessage = `Error occurred while reading file: ${error}`;
@@ -217,28 +219,7 @@ const useFileUploader = () => {
     element: HTMLTextAreaElement,
     value: string
   ): void => {
-    console.log(value)
     try {
-
-      // const valueSetter = Object.getOwnPropertyDescriptor(
-      //   window.HTMLTextAreaElement.prototype,
-      //   "value"
-      // )?.set;
-      console.log(element)
-      // const prototype = Object.getPrototypeOf(element);
-      // const prototypeValueSetter = Object.getOwnPropertyDescriptor(
-      //   prototype,
-      //   "value"
-      // )?.set;
-
-      // if (valueSetter && valueSetter !== prototypeValueSetter) {
-      //   prototypeValueSetter?.call(element, value);
-      // } else {
-      //   valueSetter?.call(element, value);
-      // }
-
-      // element.dispatchEvent(new Event("input", { bubbles: true }));
-
       const newParagraph = document.createElement('p');
 
       // Set the content of the <p> element
@@ -282,26 +263,8 @@ const useFileUploader = () => {
     done: boolean,
     totalParts: number
   ) {
-    const splittedPrompt = `${part === 1 ? basePrompt : ""}
-    ${part === 1 ? multipleFilesPrompt : multipleFilesUpPrompt}`;
-
-    const prePrompt =
-      totalParts === 1
-        ? singleFilePrompt
-        : done
-          ? lastPartPrompt
-          : splittedPrompt;
-    const promptFilename = `Filename: ${fileName || "Unknown"}`;
-    const promptPart = `Part ${part} of ${totalParts}:`;
-    const prompt = `
-${prePrompt}
-
-${promptFilename} 
-${promptPart}
-
-${text}`;
-
-    await simulateEnterKey(prompt.trim());
+    const prompt = text;
+    await simulateEnterKey(prompt);
   }
 
   const splitToDocuments = async (
@@ -313,19 +276,21 @@ ${text}`;
       chunkOverlap: overlapSize ?? DEFAULT_OVERLAP_SIZE,
     });
 
-    const docOutput = await splitter.splitDocuments([
-      new Document({ pageContent: text }),
-    ]);
+    // const docOutput = await splitter.splitDocuments([
+    //   new Document({ pageContent: text }),
+    // ]);
+    var docOutput = JSON.parse(text)
 
-    return docOutput.map((doc) => doc.pageContent);
+    return docOutput.map((el: any) => el["message"]);
   };
 
   const handleFileContent = async (fileContent: string) => {
-    const numChunks = Math.ceil(fileContent.length / chunkSize);
-    setTotalParts(numChunks);
+
     const maxTries = 20; // Set max tries to 20
 
     const splittedDocuments = await splitToDocuments(fileContent, chunkSize);
+    const numChunks = splittedDocuments.length;
+    setTotalParts(numChunks);
 
     async function processChunk(i: number) {
       if (i < numChunks && !isStopRequestedRef.current) {
@@ -365,6 +330,18 @@ ${text}`;
           processChunk(i + 1); // Process the next chunk
         }
       } else {
+        const assistantMessages = document.querySelectorAll('[data-message-author-role="assistant"]');
+
+        // Duyệt qua và in nội dung tin nhắn
+        assistantMessages.forEach(message => {
+          if (message) {
+            const content = message.textContent;
+            console.log(content);
+          }
+        });
+
+
+
         clearState();
       }
     }
