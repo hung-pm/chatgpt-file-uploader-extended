@@ -7,7 +7,6 @@ import StopIcon from "../Icons/StopIcon";
 import UploadIcon from "../Icons/UploadIcon";
 import Popup from "../Popup";
 import ProgressBar from "../ProgressBar";
-import Settings from "../Settings";
 
 export default function App() {
   const {
@@ -88,31 +87,6 @@ export default function App() {
           />
 
           <div className="flex flex-row items-center justify-start gap-1">
-            <Settings
-              onChunkSizeChange={onChunkSizeChange}
-              chunkSize={chunkSize}
-              overlapSize={overlapSize}
-              onOverlapSizeChange={onOverlapSizeChange}
-              basePrompt={basePrompt}
-              singleFilePrompt={singleFilePrompt}
-              multipleFilesPrompt={multipleFilesPrompt}
-              lastPartPrompt={lastPartPrompt}
-              setSingleFilePrompt={setSingleFilePrompt}
-              setMultipleFilesPrompt={setMultipleFilesPrompt}
-              multipleFilesUpPrompt={multipleFilesUpPrompt}
-              setMultipleFilesUpPrompt={setMultipleFilesUpPrompt}
-              setLastPartPrompt={setLastPartPrompt}
-              setBasePrompt={setBasePrompt}
-              updateLocalStorageSettings={updateLocalStorageSettings}
-              blacklist={blacklist}
-              ignoreExtensions={ignoreExtensions}
-              setBlacklist={setBlacklist}
-              setIgnoreExtensions={setIgnoreExtensions}
-              updateBlackListAndIgnoreExtensions={
-                updateBlackListAndIgnoreExtensions
-              }
-            />
-
             <button
               className={`text-white rounded-md w-fit hover:opacity-80 transition-all ${isSubmitting ? "cursor-not-allowed bg-gray-900" : "bg-green-500"
                 }`}
